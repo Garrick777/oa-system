@@ -64,50 +64,50 @@ INSERT IGNORE INTO sys_role (id, role_name, role_code, remark, status, sort) VAL
 -- ========================================
 -- 4. 用户数据（密码都是 123456）
 -- ========================================
--- 密码: $2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH (123456)
+-- 正确的BCrypt密码哈希: $2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu (123456)
 DELETE FROM sys_user WHERE id > 1;
-UPDATE sys_user SET password = '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', initial_password = NULL, password_changed = 1 WHERE id = 1;
+UPDATE sys_user SET password = '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', initial_password = NULL, password_changed = 1 WHERE id = 1;
 
 INSERT INTO sys_user (id, username, password, initial_password, password_changed, real_name, avatar, phone, email, gender, dept_id, position_id, status) VALUES
 -- 高管
-(2, 'zhangwei', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '张伟', NULL, '13800001001', 'zhangwei@example.com', 1, 2, 1, 1),
-(3, 'lina', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '李娜', NULL, '13800001002', 'lina@example.com', 2, 2, 2, 1),
+(2, 'zhangwei', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '张伟', NULL, '13800001001', 'zhangwei@example.com', 1, 2, 1, 1),
+(3, 'lina', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '李娜', NULL, '13800001002', 'lina@example.com', 2, 2, 2, 1),
 
 -- 部门经理
-(4, 'wangqiang', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '王强', NULL, '13800002001', 'wangqiang@example.com', 1, 3, 3, 1),
-(5, 'zhaojing', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '赵静', NULL, '13800002002', 'zhaojing@example.com', 2, 4, 4, 1),
-(6, 'sunli', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '孙丽', NULL, '13800002003', 'sunli@example.com', 2, 5, 5, 1),
-(7, 'zhoujun', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '周军', NULL, '13800002004', 'zhoujun@example.com', 1, 6, 6, 1),
-(8, 'wuying', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '吴英', NULL, '13800002005', 'wuying@example.com', 2, 7, 7, 1),
+(4, 'wangqiang', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '王强', NULL, '13800002001', 'wangqiang@example.com', 1, 3, 3, 1),
+(5, 'zhaojing', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '赵静', NULL, '13800002002', 'zhaojing@example.com', 2, 4, 4, 1),
+(6, 'sunli', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '孙丽', NULL, '13800002003', 'sunli@example.com', 2, 5, 5, 1),
+(7, 'zhoujun', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '周军', NULL, '13800002004', 'zhoujun@example.com', 1, 6, 6, 1),
+(8, 'wuying', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '吴英', NULL, '13800002005', 'wuying@example.com', 2, 7, 7, 1),
 
 -- 技术部员工
-(9, 'chenfei', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '陈飞', NULL, '13800003001', 'chenfei@example.com', 1, 8, 8, 1),
-(10, 'liuyang', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '刘洋', NULL, '13800003002', 'liuyang@example.com', 1, 8, 9, 1),
-(11, 'huangxin', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '黄鑫', NULL, '13800003003', 'huangxin@example.com', 1, 8, 10, 1),
-(12, 'linmei', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '林美', NULL, '13800003004', 'linmei@example.com', 2, 8, 11, 1),
-(13, 'yangkai', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '杨凯', NULL, '13800003005', 'yangkai@example.com', 1, 9, 8, 1),
-(14, 'xujie', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '徐杰', NULL, '13800003006', 'xujie@example.com', 1, 9, 9, 1),
-(15, 'hedan', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '何丹', NULL, '13800003007', 'hedan@example.com', 2, 9, 10, 1),
-(16, 'guomin', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '郭敏', NULL, '13800003008', 'guomin@example.com', 2, 10, 14, 1),
-(17, 'malong', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '马龙', NULL, '13800003009', 'malong@example.com', 1, 10, 14, 1),
+(9, 'chenfei', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '陈飞', NULL, '13800003001', 'chenfei@example.com', 1, 8, 8, 1),
+(10, 'liuyang', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '刘洋', NULL, '13800003002', 'liuyang@example.com', 1, 8, 9, 1),
+(11, 'huangxin', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '黄鑫', NULL, '13800003003', 'huangxin@example.com', 1, 8, 10, 1),
+(12, 'linmei', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '林美', NULL, '13800003004', 'linmei@example.com', 2, 8, 11, 1),
+(13, 'yangkai', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '杨凯', NULL, '13800003005', 'yangkai@example.com', 1, 9, 8, 1),
+(14, 'xujie', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '徐杰', NULL, '13800003006', 'xujie@example.com', 1, 9, 9, 1),
+(15, 'hedan', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '何丹', NULL, '13800003007', 'hedan@example.com', 2, 9, 10, 1),
+(16, 'guomin', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '郭敏', NULL, '13800003008', 'guomin@example.com', 2, 10, 14, 1),
+(17, 'malong', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '马龙', NULL, '13800003009', 'malong@example.com', 1, 10, 14, 1),
 
 -- 市场部员工
-(18, 'gaofeng', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '高峰', NULL, '13800004001', 'gaofeng@example.com', 1, 11, 15, 1),
-(19, 'fangling', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '方玲', NULL, '13800004002', 'fangling@example.com', 2, 11, 15, 1),
-(20, 'dengchao', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '邓超', NULL, '13800004003', 'dengchao@example.com', 1, 12, 16, 1),
-(21, 'xiaoyan', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '肖燕', NULL, '13800004004', 'xiaoyan@example.com', 2, 12, 16, 1),
+(18, 'gaofeng', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '高峰', NULL, '13800004001', 'gaofeng@example.com', 1, 11, 15, 1),
+(19, 'fangling', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '方玲', NULL, '13800004002', 'fangling@example.com', 2, 11, 15, 1),
+(20, 'dengchao', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '邓超', NULL, '13800004003', 'dengchao@example.com', 1, 12, 16, 1),
+(21, 'xiaoyan', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '肖燕', NULL, '13800004004', 'xiaoyan@example.com', 2, 12, 16, 1),
 
 -- HR部员工
-(22, 'tanghua', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '唐华', NULL, '13800005001', 'tanghua@example.com', 2, 5, 17, 1),
-(23, 'songjie', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '宋洁', NULL, '13800005002', 'songjie@example.com', 2, 5, 17, 1),
+(22, 'tanghua', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '唐华', NULL, '13800005001', 'tanghua@example.com', 2, 5, 17, 1),
+(23, 'songjie', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '宋洁', NULL, '13800005002', 'songjie@example.com', 2, 5, 17, 1),
 
 -- 财务部员工
-(24, 'hanjun', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '韩军', NULL, '13800006001', 'hanjun@example.com', 1, 6, 18, 1),
-(25, 'pengyan', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '彭艳', NULL, '13800006002', 'pengyan@example.com', 2, 6, 18, 1),
+(24, 'hanjun', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '韩军', NULL, '13800006001', 'hanjun@example.com', 1, 6, 18, 1),
+(25, 'pengyan', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '彭艳', NULL, '13800006002', 'pengyan@example.com', 2, 6, 18, 1),
 
 -- 行政部员工
-(26, 'cenghui', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '曾辉', NULL, '13800007001', 'cenghui@example.com', 1, 7, 19, 1),
-(27, 'luoxia', '$2a$10$2qT/.uOaotSAOI/egUkZz.gPvVy6v.lcwDfO2Ato6SBS5qQxArQh.', '123456', 0, '罗霞', NULL, '13800007002', 'luoxia@example.com', 2, 7, 19, 1);
+(26, 'cenghui', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '曾辉', NULL, '13800007001', 'cenghui@example.com', 1, 7, 19, 1),
+(27, 'luoxia', '$2a$10$eDQYO3v/i3tdFlrCPlNEtuHKU4ajjbFCRf.JU1a6UWYzKGbgUzsLu', '123456', 0, '罗霞', NULL, '13800007002', 'luoxia@example.com', 2, 7, 19, 1);
 
 -- ========================================
 -- 5. 用户角色关联

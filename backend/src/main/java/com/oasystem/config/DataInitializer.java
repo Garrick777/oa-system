@@ -31,8 +31,9 @@ public class DataInitializer {
     private final PasswordEncoder passwordEncoder;
 
     // 测试用户配置：username -> {realName, roleCode, password}
+    // 注意：所有测试账号密码统一为 123456
     private static final Map<String, String[]> TEST_USERS = new HashMap<>() {{
-        put("admin", new String[]{"超级管理员", "super_admin", "admin123"});
+        put("admin", new String[]{"超级管理员", "super_admin", "123456"});
         put("leader", new String[]{"张总", "company_leader", "123456"});
         put("hr", new String[]{"李人事", "hr_admin", "123456"});
         put("officer", new String[]{"王行政", "admin_officer", "123456"});
