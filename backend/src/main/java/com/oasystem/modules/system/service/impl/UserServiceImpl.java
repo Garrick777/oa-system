@@ -95,7 +95,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         response.setDeptId(user.getDeptId());
         response.setDeptName(user.getDeptName());
         // 判断是否需要修改密码（passwordChanged为0或null表示未修改过）
-        response.setNeedChangePassword(user.getPasswordChanged() == null || user.getPasswordChanged() == 0);
+        // 超级管理员不需要强制修改密码
+        boolean needChange = (user.getPasswordChanged() == null || user.getPasswordChanged() == 0)
+                && !"super_admin".equals(user.getRoleCode());
+        response.setNeedChangePassword(needChange);
 
         log.info("用户登录成功: {}", user.getUsername());
         return response;

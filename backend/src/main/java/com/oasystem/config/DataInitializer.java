@@ -103,8 +103,14 @@ public class DataInitializer {
                 User user = new User();
                 user.setUsername(username);
                 user.setPassword(passwordEncoder.encode(password));
-                user.setInitialPassword(password); // 存储初始密码明文
-                user.setPasswordChanged(0); // 标记为未修改密码
+                // 超级管理员不需要初始密码提示和强制改密
+                if ("super_admin".equals(roleCode)) {
+                    user.setInitialPassword(null);
+                    user.setPasswordChanged(1); // 标记为已修改密码
+                } else {
+                    user.setInitialPassword(password); // 存储初始密码明文
+                    user.setPasswordChanged(0); // 标记为未修改密码
+                }
                 user.setRealName(realName);
                 user.setStatus(1);
                 userMapper.insert(user);
