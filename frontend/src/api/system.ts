@@ -9,6 +9,11 @@ export function getUsers(params: any) {
 // 别名：用于工作流等模块
 export const getUserList = getUsers
 
+// 简化版用户列表（无权限限制，用于下拉选择）
+export function getSimpleUserList(params: any) {
+  return request.get('/system/users/simple', { params })
+}
+
 export function getUser(id: number) {
   return request.get(`/system/users/${id}`)
 }
@@ -171,4 +176,22 @@ export function updateDictData(id: number, data: any) {
 
 export function deleteDictData(id: number) {
   return request.delete(`/system/dicts/data/${id}`)
+}
+
+// ==================== 工作台 ====================
+
+export function getDashboardStats() {
+  return request.get('/dashboard/stats')
+}
+
+export function getMyTodos() {
+  return request.get('/dashboard/my-todos')
+}
+
+export function getRecentActivities() {
+  return request.get('/dashboard/recent-activities')
+}
+
+export function getPendingApprovalCount() {
+  return request.get('/dashboard/pending-approval-count')
 }

@@ -92,4 +92,21 @@ public class UserController {
         userService.resetPassword(id, newPassword);
         return Result.success();
     }
+
+    @Operation(summary = "获取简化用户列表（用于下拉选择）")
+    @GetMapping("/simple")
+    public PageResult<User> simpleList(
+            @Parameter(description = "当前页") @RequestParam(defaultValue = "1") Integer current,
+            @Parameter(description = "每页大小") @RequestParam(defaultValue = "100") Integer size,
+            @Parameter(description = "关键词") @RequestParam(required = false) String keyword) {
+        // 返回简化版用户列表，只包含ID和姓名
+        IPage<User> page = userService.pageUsers(current, size, keyword, keyword, null, 1, null);
+        // 脱敏处理
+        page.getRecords().forEach(user -> {
+            user.setPassword(null);
+            user.setPhone(null);
+            user.setEmail(null);
+        });
+        return PageResult.of(page);
+    }
 }

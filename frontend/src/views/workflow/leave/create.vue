@@ -150,7 +150,7 @@ import {
   getLeaveBalance,
   calculateLeaveDuration
 } from '@/api/workflow';
-import { getUserList } from '@/api/system';
+import { getSimpleUserList } from '@/api/system';
 
 const router = useRouter();
 const formRef = ref<FormInstance>();
@@ -211,8 +211,9 @@ const handleFileChange = (file: UploadFile) => {
 
 const loadUserList = async () => {
   try {
-    const res: any = await getUserList({ page: 1, size: 1000 });
-    userList.value = res.data?.records || [];
+    const res: any = await getSimpleUserList({ page: 1, size: 100 });
+    // 响应拦截器直接返回response.data，所以直接取records
+    userList.value = res.records || res.data?.records || [];
   } catch (error) {
     console.error('加载用户列表失败', error);
   }

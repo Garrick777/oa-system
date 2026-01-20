@@ -23,15 +23,15 @@
       </div>
       <div class="welcome-stats">
         <div class="stat-item">
-          <span class="stat-value">12</span>
+          <span class="stat-value">{{ todoCount }}</span>
           <span class="stat-label">待办事项</span>
         </div>
         <div class="stat-item">
-          <span class="stat-value">5</span>
+          <span class="stat-value">{{ pendingApprovalCount }}</span>
           <span class="stat-label">待审批</span>
         </div>
         <div class="stat-item">
-          <span class="stat-value">3</span>
+          <span class="stat-value">{{ unreadMessageCount }}</span>
           <span class="stat-label">未读消息</span>
         </div>
       </div>
@@ -117,8 +117,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, h } from 'vue'
+import { ref, computed, h, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { getDashboardStats, getMyTodos, getRecentActivities } from '@/api/system'
 
 const userStore = useUserStore()
 
@@ -158,33 +159,94 @@ const ApprovalIcon = () => h('svg', { width: 24, height: 24, viewBox: '0 0 24 24
   h('polyline', { points: '10 9 9 9 8 9' })
 ])
 
+// 响应式数据
+const todoCount = ref(0)
+const pendingApprovalCount = ref(0)
+const unreadMessageCount = ref(0)
+
 const stats = ref([
-  { title: '员工总数', value: '156', trend: 12, gradient: 'linear-gradient(135deg, #6366f1, #8b5cf6)', icon: UserIcon },
-  { title: '部门数量', value: '12', trend: 5, gradient: 'linear-gradient(135deg, #3b82f6, #06b6d4)', icon: DeptIcon },
-  { title: '本月任务', value: '89', trend: -3, gradient: 'linear-gradient(135deg, #10b981, #34d399)', icon: TaskIcon },
-  { title: '待审批', value: '23', trend: 8, gradient: 'linear-gradient(135deg, #f59e0b, #fbbf24)', icon: ApprovalIcon },
+  { title: '员工总数', value: '0', trend: 12, gradient: 'linear-gradient(135deg, #6366f1, #8b5cf6)', icon: UserIcon },
+  { title: '部门数量', value: '0', trend: 5, gradient: 'linear-gradient(135deg, #3b82f6, #06b6d4)', icon: DeptIcon },
+  { title: '本月申请', value: '0', trend: -3, gradient: 'linear-gradient(135deg, #10b981, #34d399)', icon: TaskIcon },
+  { title: '待审批', value: '0', trend: 8, gradient: 'linear-gradient(135deg, #f59e0b, #fbbf24)', icon: ApprovalIcon },
 ])
 
 const quickActions = ref([
-  { title: '新建审批', path: '#', color: 'linear-gradient(135deg, #6366f1, #8b5cf6)', icon: ApprovalIcon },
-  { title: '发起会议', path: '#', color: 'linear-gradient(135deg, #3b82f6, #06b6d4)', icon: DeptIcon },
-  { title: '提交日志', path: '#', color: 'linear-gradient(135deg, #10b981, #34d399)', icon: TaskIcon },
-  { title: '考勤打卡', path: '#', color: 'linear-gradient(135deg, #f59e0b, #fbbf24)', icon: UserIcon },
+  { title: '新建审批', path: '/my/apply', color: 'linear-gradient(135deg, #6366f1, #8b5cf6)', icon: ApprovalIcon },
+  { title: '发起会议', path: '/meeting/create', color: 'linear-gradient(135deg, #3b82f6, #06b6d4)', icon: DeptIcon },
+  { title: '提交日志', path: '/log/create', color: 'linear-gradient(135deg, #10b981, #34d399)', icon: TaskIcon },
+  { title: '考勤打卡', path: '/attendance', color: 'linear-gradient(135deg, #f59e0b, #fbbf24)', icon: UserIcon },
 ])
 
-const todos = ref([
-  { id: 1, title: '完成Q1季度报告', time: '今天 17:00', priority: 'high', done: false },
-  { id: 2, title: '审批张三的请假申请', time: '今天 12:00', priority: 'medium', done: false },
-  { id: 3, title: '参加部门周会', time: '明天 10:00', priority: 'low', done: false },
-  { id: 4, title: '更新项目进度', time: '本周五', priority: 'medium', done: true },
-])
+const todos = ref<any[]>([])
+const activities = ref<any[]>([])
 
-const activities = ref([
-  { id: 1, text: '李明提交了请假申请', time: '10分钟前', color: '#6366f1' },
-  { id: 2, text: '财务部通过了报销申请', time: '30分钟前', color: '#10b981' },
-  { id: 3, text: '新员工王芳加入了技术部', time: '2小时前', color: '#3b82f6' },
-  { id: 4, text: '系统完成了数据备份', time: '5小时前', color: '#f59e0b' },
-])
+// 加载统计数据
+const loadStats = async () => {
+  try {
+    const res: any = await getDashboardStats()
+    if (res.code === 200 && res.data) {
+      stats.value[0].value = String(res.data.employeeCount || 0)
+      stats.value[1].value = String(res.data.departmentCount || 0)
+      stats.value[2].value = String(res.data.monthlyLeaveCount || 0)
+      stats.value[3].value = String(res.data.pendingApprovalCount || 0)
+      pendingApprovalCount.value = res.data.pendingApprovalCount || 0
+    }
+  } catch (error) {
+    console.error('加载统计数据失败', error)
+  }
+}
+
+// 加载待办事项
+const loadTodos = async () => {
+  try {
+    const res: any = await getMyTodos()
+    if (res.code === 200 && res.data) {
+      todos.value = res.data.map((item: any) => ({
+        id: item.id,
+        title: item.title,
+        time: item.deadline,
+        priority: item.priority === 'high' ? 'high' : item.priority === 'normal' ? 'medium' : 'low',
+        done: false
+      }))
+      todoCount.value = todos.value.length
+    }
+  } catch (error) {
+    console.error('加载待办事项失败', error)
+    // 显示默认数据
+    todos.value = [
+      { id: 1, title: '暂无待办事项', time: '-', priority: 'low', done: false },
+    ]
+  }
+}
+
+// 加载最近活动
+const loadActivities = async () => {
+  try {
+    const res: any = await getRecentActivities()
+    if (res.code === 200 && res.data) {
+      const colors = ['#6366f1', '#10b981', '#3b82f6', '#f59e0b', '#ef4444']
+      activities.value = res.data.map((item: any, index: number) => ({
+        id: item.id,
+        text: item.content,
+        time: item.time,
+        color: colors[index % colors.length]
+      }))
+    }
+  } catch (error) {
+    console.error('加载最近活动失败', error)
+    // 显示默认数据
+    activities.value = [
+      { id: 1, text: '欢迎使用OA办公系统', time: '刚刚', color: '#6366f1' },
+    ]
+  }
+}
+
+onMounted(() => {
+  loadStats()
+  loadTodos()
+  loadActivities()
+})
 </script>
 
 <style scoped lang="scss">
