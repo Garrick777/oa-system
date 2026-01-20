@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <!-- 架构图 -->
+    <!-- 架构图 - 横向 -->
     <div v-if="view === 'chart'" class="chart-area" ref="chartArea"
          @mousedown="startDrag" @mousemove="onDrag" @mouseup="endDrag" @mouseleave="endDrag"
          @wheel.prevent="onScroll">
@@ -89,7 +89,7 @@ import * as api from '@/api/org'
 
 const loading = ref(true)
 const view = ref('chart')
-const zoom = ref(90)
+const zoom = ref(85)
 const pos = reactive({ x: 0, y: 0 })
 const dragging = ref(false)
 const dragStart = reactive({ x: 0, y: 0 })
@@ -97,7 +97,7 @@ const current = ref<any>(null)
 const tree = ref<any>({})
 const expanded = ref<Set<number>>(new Set())
 
-// 树节点组件
+// 横向树节点组件
 const TreeNode = defineComponent({
   name: 'TreeNode',
   props: ['data', 'expanded', 'root'],
@@ -109,7 +109,7 @@ const TreeNode = defineComponent({
       const hasKids = d.children?.length > 0
       const open = props.expanded.has(d.id)
 
-      return h('div', { class: 'node-wrap' }, [
+      return h('div', { class: 'h-node' }, [
         // 卡片
         h('div', { 
           class: ['card', props.root ? 'root' : ''],
@@ -126,10 +126,10 @@ const TreeNode = defineComponent({
           hasKids && h('span', { 
             class: 'toggle',
             onClick: (e: Event) => { e.stopPropagation(); emit('toggle', d.id) }
-          }, open ? '▼' : '▶')
+          }, open ? '◀' : '▶')
         ]),
-        // 子节点
-        hasKids && open && h('div', { class: 'children' },
+        // 子节点 - 横向排列
+        hasKids && open && h('div', { class: 'h-children' },
           d.children.map((c: any) => h(TreeNode, {
             key: c.id, data: c, expanded: props.expanded, root: false,
             onClick: (n: any) => emit('click', n),
@@ -158,7 +158,6 @@ const loadData = async () => {
     const res = await api.getDeptTree()
     if (res.data?.length) {
       tree.value = res.data[0]
-      // 默认展开两级
       expanded.value.add(res.data[0].id)
       res.data[0].children?.forEach((c: any) => expanded.value.add(c.id))
     }
@@ -182,14 +181,12 @@ const defaultTree = () => ({
   ]
 })
 
-// 缩放
 const zoomIn = () => { zoom.value = Math.min(zoom.value + 10, 150) }
 const zoomOut = () => { zoom.value = Math.max(zoom.value - 10, 50) }
 const onScroll = (e: WheelEvent) => {
   zoom.value = Math.min(Math.max(zoom.value + (e.deltaY > 0 ? -5 : 5), 50), 150)
 }
 
-// 拖拽
 const startDrag = (e: MouseEvent) => {
   dragging.value = true
   dragStart.x = e.clientX - pos.x
@@ -202,7 +199,6 @@ const onDrag = (e: MouseEvent) => {
 }
 const endDrag = () => { dragging.value = false }
 
-// 展开
 const toggle = (id: number) => {
   expanded.value.has(id) ? expanded.value.delete(id) : expanded.value.add(id)
   expanded.value = new Set(expanded.value)
@@ -280,11 +276,12 @@ onMounted(loadData)
 .chart-area:active { cursor: grabbing; }
 .chart {
   position: relative;
-  left: 50%;
-  top: 40px;
-  transform-origin: top center;
+  left: 40px;
+  top: 50%;
+  transform-origin: left center;
   padding: 20px;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
 }
 .loading {
   display: flex;
@@ -303,12 +300,13 @@ onMounted(loadData)
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* 树节点 */
-.node-wrap {
+/* 横向树节点 */
+.h-node {
   display: flex;
-  flex-direction: column;
   align-items: center;
 }
+
+/* 卡片 */
 .card {
   display: flex;
   align-items: center;
@@ -319,7 +317,7 @@ onMounted(loadData)
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   cursor: pointer;
   transition: all 0.2s;
-  min-width: 180px;
+  min-width: 160px;
   position: relative;
   border: 1px solid rgba(0,0,0,0.05);
 }
@@ -329,30 +327,31 @@ onMounted(loadData)
 }
 .card.root {
   background: linear-gradient(135deg, #1a1a2e, #2d2d44);
-  min-width: 200px;
+  min-width: 180px;
+  padding: 14px 18px;
 }
-.card.root .avatar { background: rgba(255,255,255,0.15); font-size: 22px; }
+.card.root .avatar { background: rgba(255,255,255,0.15); font-size: 20px; }
 .card.root .name { color: #fff; }
 .card.root .meta { color: rgba(255,255,255,0.7); }
 .card.root .leader-name { color: #7dd3fc; }
 .card.root .toggle { color: rgba(255,255,255,0.6); }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   background: linear-gradient(135deg, #007aff, #5856d6);
-  border-radius: 10px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   flex-shrink: 0;
 }
 .info { flex: 1; min-width: 0; }
 .name {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: #1a1a1a;
   white-space: nowrap;
@@ -362,66 +361,61 @@ onMounted(loadData)
 .meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   margin-top: 2px;
-  font-size: 12px;
+  font-size: 11px;
   color: #888;
 }
 .leader-name { color: #007aff; font-weight: 500; }
 .count {
   background: rgba(0,0,0,0.05);
-  padding: 1px 6px;
-  border-radius: 4px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 10px;
 }
 .toggle {
   font-size: 10px;
   color: #999;
   padding: 4px;
   cursor: pointer;
+  margin-left: 4px;
 }
 .toggle:hover { color: #333; }
 
-/* 子节点 */
-.children {
+/* 横向子节点 */
+.h-children {
   display: flex;
-  gap: 16px;
-  margin-top: 24px;
-  padding-top: 24px;
+  flex-direction: column;
+  gap: 12px;
+  margin-left: 32px;
+  padding-left: 24px;
   position: relative;
 }
-.children::before {
+
+/* 横向连接线 */
+.h-children::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 50%;
-  width: 1px;
-  height: 24px;
-  background: #d5d5d5;
-}
-.children > .node-wrap {
-  position: relative;
-}
-.children > .node-wrap::before {
-  content: '';
-  position: absolute;
-  top: -24px;
-  left: 50%;
-  width: 1px;
-  height: 24px;
-  background: #d5d5d5;
-}
-.children > .node-wrap::after {
-  content: '';
-  position: absolute;
-  top: -24px;
   left: 0;
-  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #d5d5d5;
+}
+
+.h-children > .h-node {
+  position: relative;
+}
+
+.h-children > .h-node::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  width: 24px;
   height: 1px;
   background: #d5d5d5;
 }
-.children > .node-wrap:first-child::after { left: 50%; }
-.children > .node-wrap:last-child::after { right: 50%; }
-.children > .node-wrap:only-child::after { display: none; }
 
 /* 表格 */
 .table-area { flex: 1; padding: 20px; overflow: auto; }
@@ -456,7 +450,7 @@ onMounted(loadData)
   top: 0;
   right: 0;
   bottom: 0;
-  width: 340px;
+  width: 320px;
   background: rgba(255,255,255,0.95);
   backdrop-filter: blur(20px);
   box-shadow: -2px 0 20px rgba(0,0,0,0.1);
@@ -469,31 +463,31 @@ onMounted(loadData)
   padding: 16px 20px;
   border-bottom: 1px solid #eee;
 }
-.panel-head h3 { margin: 0; font-size: 17px; }
+.panel-head h3 { margin: 0; font-size: 16px; }
 .close {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border: none;
   background: #f0f0f0;
   border-radius: 50%;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
 }
 .close:hover { background: #e5e5e5; }
-.panel-body { padding: 20px; }
+.panel-body { padding: 16px 20px; }
 .field {
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
   border-bottom: 1px solid #f5f5f5;
 }
-.field label { color: #888; font-size: 14px; }
-.field span { font-size: 14px; font-weight: 500; }
+.field label { color: #888; font-size: 13px; }
+.field span { font-size: 13px; font-weight: 500; }
 .field .highlight { color: #007aff; }
 .field .green { color: #2e7d32; }
 .field .red { color: #c62828; }
-.subs { margin-top: 20px; }
-.subs h4 { margin: 0 0 10px; font-size: 13px; color: #888; }
+.subs { margin-top: 16px; }
+.subs h4 { margin: 0 0 10px; font-size: 12px; color: #888; }
 .sub-item {
   display: flex;
   justify-content: space-between;
@@ -502,9 +496,10 @@ onMounted(loadData)
   border-radius: 8px;
   margin-bottom: 6px;
   cursor: pointer;
+  font-size: 13px;
 }
 .sub-item:hover { background: #f0f0f0; }
-.sub-count { color: #888; font-size: 12px; }
+.sub-count { color: #888; font-size: 11px; }
 
 /* 动画 */
 .slide-enter-active, .slide-leave-active { transition: transform 0.25s ease; }
