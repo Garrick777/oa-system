@@ -6,6 +6,9 @@ export function getUsers(params: any) {
   return request.get('/system/users', { params })
 }
 
+// 别名：用于工作流等模块
+export const getUserList = getUsers
+
 export function getUser(id: number) {
   return request.get(`/system/users/${id}`)
 }
