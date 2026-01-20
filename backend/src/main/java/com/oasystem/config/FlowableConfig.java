@@ -23,8 +23,6 @@ public class FlowableConfig {
             engineConfiguration.setAsyncExecutorActivate(true);
             // 设置字符集
             engineConfiguration.setDatabaseTablePrefix("");
-            // 关闭ID生成器校验
-            engineConfiguration.setIdGeneratorDataSourceName(null);
             // 设置流程图字体
             engineConfiguration.setActivityFontName("宋体");
             engineConfiguration.setLabelFontName("宋体");
