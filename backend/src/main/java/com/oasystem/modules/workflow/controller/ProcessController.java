@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @Tag(name = "流程管理")
 @RestController
-@RequestMapping("/api/workflow/process")
+@RequestMapping("/workflow/process")
 @RequiredArgsConstructor
 public class ProcessController {
 

@@ -18,7 +18,7 @@ import java.util.Map;
  */
 @Tag(name = "请假申请")
 @RestController
-@RequestMapping("/api/workflow/leave")
+@RequestMapping("/workflow/leave")
 @RequiredArgsConstructor
 public class LeaveController {
 

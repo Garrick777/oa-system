@@ -20,7 +20,7 @@ import java.util.Map;
  */
 @Tag(name = "报销申请")
 @RestController
-@RequestMapping("/api/workflow/expense")
+@RequestMapping("/workflow/expense")
 @RequiredArgsConstructor
 public class ExpenseController {
 

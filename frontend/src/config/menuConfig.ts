@@ -27,7 +27,11 @@ export const ROLES = {
 
 // 角色组合，方便复用
 const ALL_ROLES = Object.values(ROLES)
+// 普通员工角色（不含超级管理员）
+const EMPLOYEE_ROLES = [ROLES.COMPANY_LEADER, ROLES.HR_ADMIN, ROLES.ADMIN_OFFICER, ROLES.FINANCE_ADMIN, ROLES.DEPT_MANAGER, ROLES.EMPLOYEE]
 const MANAGER_AND_ABOVE = [ROLES.SUPER_ADMIN, ROLES.COMPANY_LEADER, ROLES.HR_ADMIN, ROLES.ADMIN_OFFICER, ROLES.FINANCE_ADMIN, ROLES.DEPT_MANAGER]
+// 审批管理者（不含超管，超管不参与业务审批）
+const APPROVER_ROLES = [ROLES.COMPANY_LEADER, ROLES.HR_ADMIN, ROLES.ADMIN_OFFICER, ROLES.FINANCE_ADMIN, ROLES.DEPT_MANAGER]
 const ADMIN_ROLES = [ROLES.SUPER_ADMIN, ROLES.HR_ADMIN]
 const ORG_ROLES = [ROLES.SUPER_ADMIN, ROLES.HR_ADMIN]
 const ADMIN_HR_OFFICER = [ROLES.SUPER_ADMIN, ROLES.HR_ADMIN, ROLES.ADMIN_OFFICER]
@@ -45,126 +49,126 @@ export const menuConfig: MenuItem[] = [
     roles: ALL_ROLES,
   },
 
-  // ========== 我的工作 ==========
+  // ========== 我的工作（普通员工功能，超管不需要）==========
   {
     id: 'my-work',
     title: '我的工作',
     icon: 'work',
-    roles: ALL_ROLES,
+    roles: EMPLOYEE_ROLES,
     children: [
       {
         id: 'my-todo',
         title: '待办事项',
         icon: 'todo',
         path: '/my/todo',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,
       },
       {
         id: 'my-apply',
         title: '我的申请',
         icon: 'apply',
         path: '/my/apply',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,
       },
       {
         id: 'my-approved',
         title: '审批记录',
         icon: 'record',
         path: '/my/approved',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,
       },
       {
         id: 'my-task',
         title: '我的任务',
         icon: 'task',
         path: '/my/task',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,
       },
     ],
   },
 
-  // ========== 审批中心 ==========
+  // ========== 审批中心（审批管理者，超管不参与业务审批）==========
   {
     id: 'approve',
     title: '审批中心',
     icon: 'approve',
-    roles: MANAGER_AND_ABOVE,
+    roles: APPROVER_ROLES,
     children: [
       {
         id: 'approve-pending',
         title: '待我审批',
         icon: 'pending',
         path: '/approve/pending',
-        roles: MANAGER_AND_ABOVE,
+        roles: APPROVER_ROLES,
       },
       {
         id: 'approve-done',
         title: '已审批',
         icon: 'done',
         path: '/approve/done',
-        roles: MANAGER_AND_ABOVE,
+        roles: APPROVER_ROLES,
       },
       {
         id: 'approve-cc',
         title: '抄送给我',
         icon: 'cc',
         path: '/approve/cc',
-        roles: MANAGER_AND_ABOVE,
+        roles: APPROVER_ROLES,
       },
     ],
   },
 
-  // ========== 日程管理 ==========
+  // ========== 日程管理（普通员工功能）==========
   {
     id: 'schedule',
     title: '日程管理',
     icon: 'calendar',
-    roles: ALL_ROLES,
+    roles: EMPLOYEE_ROLES,
     children: [
       {
         id: 'my-schedule',
         title: '我的日程',
         icon: 'my-calendar',
         path: '/schedule/my',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,
       },
       {
         id: 'meeting-schedule',
         title: '会议日程',
         icon: 'meeting',
         path: '/schedule/meeting',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,
       },
     ],
   },
 
-  // ========== 工作日志 ==========
+  // ========== 工作日志（普通员工功能）==========
   {
     id: 'worklog',
     title: '工作日志',
     icon: 'log',
-    roles: ALL_ROLES,
+    roles: EMPLOYEE_ROLES,
     children: [
       {
         id: 'write-log',
         title: '写日志',
         icon: 'write',
         path: '/worklog/write',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,
       },
       {
         id: 'my-log',
         title: '我的日志',
         icon: 'my-log',
         path: '/worklog/my',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,
       },
       {
         id: 'team-log',
         title: '团队日志',
         icon: 'team-log',
         path: '/worklog/team',
-        roles: [...MANAGER_AND_ABOVE],
+        roles: APPROVER_ROLES,
       },
     ],
   },
@@ -174,21 +178,21 @@ export const menuConfig: MenuItem[] = [
     id: 'attendance',
     title: '考勤管理',
     icon: 'attendance',
-    roles: ALL_ROLES,
+    roles: [...EMPLOYEE_ROLES, ROLES.SUPER_ADMIN],  // 超管可以看考勤管理（作为管理功能）
     children: [
       {
         id: 'clock-in',
         title: '打卡签到',
         icon: 'clock',
         path: '/attendance/clock',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,  // 普通员工打卡
       },
       {
         id: 'my-attendance',
         title: '我的考勤',
         icon: 'my-attendance',
         path: '/attendance/my',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,  // 普通员工查看自己考勤
       },
       {
         id: 'team-attendance',
@@ -214,66 +218,66 @@ export const menuConfig: MenuItem[] = [
     ],
   },
 
-  // ========== 公告通知 ==========
+  // ========== 公告通知（所有人可见）==========
   {
     id: 'notice',
     title: '公告通知',
     icon: 'notice',
     path: '/notice',
-    roles: ALL_ROLES,
+    roles: EMPLOYEE_ROLES,  // 超管通过系统管理发布公告，不需要在这里看
   },
 
-  // ========== 文档中心 ==========
+  // ========== 文档中心（普通员工功能）==========
   {
     id: 'document',
     title: '文档中心',
     icon: 'document',
-    roles: ALL_ROLES,
+    roles: EMPLOYEE_ROLES,
     children: [
       {
         id: 'public-doc',
         title: '公共文档',
         icon: 'public',
         path: '/document/public',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,
       },
       {
         id: 'dept-doc',
         title: '部门文档',
         icon: 'dept',
         path: '/document/dept',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,
       },
       {
         id: 'my-doc',
         title: '我的文档',
         icon: 'my-doc',
         path: '/document/my',
-        roles: ALL_ROLES,
+        roles: EMPLOYEE_ROLES,
       },
     ],
   },
 
-  // ========== 团队管理 ==========
+  // ========== 团队管理（管理层功能）==========
   {
     id: 'team',
     title: '团队管理',
     icon: 'team',
-    roles: [ROLES.SUPER_ADMIN, ROLES.COMPANY_LEADER, ROLES.HR_ADMIN, ROLES.DEPT_MANAGER],
+    roles: [ROLES.COMPANY_LEADER, ROLES.HR_ADMIN, ROLES.DEPT_MANAGER],  // 超管通过系统/组织管理
     children: [
       {
         id: 'team-member',
         title: '部门成员',
         icon: 'member',
         path: '/team/member',
-        roles: [ROLES.SUPER_ADMIN, ROLES.COMPANY_LEADER, ROLES.HR_ADMIN, ROLES.DEPT_MANAGER],
+        roles: [ROLES.COMPANY_LEADER, ROLES.HR_ADMIN, ROLES.DEPT_MANAGER],
       },
       {
         id: 'task-assign',
         title: '任务分配',
         icon: 'assign',
         path: '/team/task',
-        roles: [ROLES.SUPER_ADMIN, ROLES.COMPANY_LEADER, ROLES.HR_ADMIN, ROLES.DEPT_MANAGER],
+        roles: [ROLES.COMPANY_LEADER, ROLES.HR_ADMIN, ROLES.DEPT_MANAGER],
       },
     ],
   },
@@ -530,12 +534,12 @@ export const menuConfig: MenuItem[] = [
     ],
   },
 
-  // ========== 个人中心 ==========
+  // ========== 个人中心（所有用户）==========
   {
     id: 'profile',
     title: '个人中心',
     icon: 'profile',
-    path: '/my/profile',
+    path: '/profile',
     roles: ALL_ROLES,
     hidden: true, // 通常在顶部用户菜单中，不在侧边栏显示
   },
