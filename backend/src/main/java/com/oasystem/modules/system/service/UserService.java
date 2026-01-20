@@ -30,6 +30,11 @@ public interface UserService extends IService<User> {
     User getByUsername(String username);
 
     /**
+     * 根据ID查询用户（含角色信息）
+     */
+    User getUserById(Long id);
+
+    /**
      * 加载用户详情（用于认证）
      */
     LoginUser loadUserByUsername(String username);

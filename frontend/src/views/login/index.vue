@@ -157,7 +157,7 @@
           <div class="login-footer">
             <span class="divider-text">测试账号 (密码均为: 123456)</span>
             <div class="test-accounts">
-              <button class="test-btn" @click="fillTestAccount('admin', 'admin123')">
+              <button class="test-btn" @click="fillTestAccount('admin', '123456')">
                 <span class="test-icon">👑</span>
                 <span>超级管理员</span>
               </button>

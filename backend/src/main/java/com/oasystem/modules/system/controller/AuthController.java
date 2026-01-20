@@ -45,8 +45,10 @@ public class AuthController {
     @GetMapping("/me")
     public Result<User> getCurrentUser() {
         Long userId = SecurityUtils.getCurrentUserId();
-        User user = userService.getById(userId);
-        user.setPassword(null);
+        User user = userService.getUserById(userId);
+        if (user != null) {
+            user.setPassword(null);
+        }
         return Result.success(user);
     }
 

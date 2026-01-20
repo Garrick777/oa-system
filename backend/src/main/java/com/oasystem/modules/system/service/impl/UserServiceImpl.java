@@ -119,6 +119,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public User getUserById(Long id) {
+        return baseMapper.selectUserById(id);
+    }
+
+    @Override
     public LoginUser loadUserByUsername(String username) {
         User user = baseMapper.selectByUsername(username);
         if (user == null) {
