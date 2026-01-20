@@ -30,4 +30,8 @@ ADD COLUMN IF NOT EXISTS permission VARCHAR(100) NULL COMMENT '权限标识' AFT
 -- 同步perms到permission
 UPDATE sys_menu SET permission = perms WHERE permission IS NULL AND perms IS NOT NULL;
 
+-- 超级管理员不需要强制修改密码
+UPDATE sys_user SET password_changed = 1, initial_password = NULL 
+WHERE username = 'admin';
+
 SELECT 'Database update completed!' AS message;
