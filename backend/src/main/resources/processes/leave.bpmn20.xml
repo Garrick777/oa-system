@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:flowable="http://flowable.org/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.flowable.org/processdef">
+
+    <process id="leave" name="请假申请" isExecutable="true">
+        <documentation>员工请假审批流程</documentation>
+        
+        <!-- 开始事件 -->
+        <startEvent id="startEvent" name="开始">
+            <extensionElements>
+                <flowable:formProperty id="initiator" name="发起人" type="string"/>
+            </extensionElements>
+        </startEvent>
+        
+        <!-- 部门经理审批 -->
+        <userTask id="deptManagerApproval" name="部门经理审批" flowable:candidateGroups="dept_manager">
+            <documentation>部门经理审批请假申请</documentation>
+        </userTask>
+        
+        <!-- 判断请假天数 -->
+        <exclusiveGateway id="durationGateway" name="判断请假天数"/>
+        
+        <!-- HR审批（大于3天需要HR审批） -->
+        <userTask id="hrApproval" name="HR审批" flowable:candidateGroups="hr_admin">
+            <documentation>HR审批请假申请（请假天数超过3天）</documentation>
+        </userTask>
+        
+        <!-- 结束事件 -->
+        <endEvent id="endEvent" name="结束"/>
+        
+        <!-- 流程线 -->
+        <sequenceFlow id="flow1" sourceRef="startEvent" targetRef="deptManagerApproval"/>
+        <sequenceFlow id="flow2" sourceRef="deptManagerApproval" targetRef="durationGateway"/>
+        <sequenceFlow id="flow3" sourceRef="durationGateway" targetRef="hrApproval">
+            <conditionExpression xsi:type="tFormalExpression">${duration > 24}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow4" sourceRef="durationGateway" targetRef="endEvent">
+            <conditionExpression xsi:type="tFormalExpression">${duration &lt;= 24}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow5" sourceRef="hrApproval" targetRef="endEvent"/>
+    </process>
+    
+    <bpmndi:BPMNDiagram id="BPMNDiagram_leave">
+        <bpmndi:BPMNPlane bpmnElement="leave" id="BPMNPlane_leave">
+            <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+                <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="163.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="deptManagerApproval" id="BPMNShape_deptManagerApproval">
+                <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="138.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="durationGateway" id="BPMNShape_durationGateway">
+                <omgdc:Bounds height="40.0" width="40.0" x="370.0" y="158.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="hrApproval" id="BPMNShape_hrApproval">
+                <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="60.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="endEvent" id="BPMNShape_endEvent">
+                <omgdc:Bounds height="28.0" width="28.0" x="650.0" y="164.0"/>
+            </bpmndi:BPMNShape>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

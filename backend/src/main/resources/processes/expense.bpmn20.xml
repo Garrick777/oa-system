@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:flowable="http://flowable.org/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.flowable.org/processdef">
+
+    <process id="expense" name="报销申请" isExecutable="true">
+        <documentation>费用报销审批流程</documentation>
+        
+        <!-- 开始事件 -->
+        <startEvent id="startEvent" name="开始"/>
+        
+        <!-- 部门经理审批 -->
+        <userTask id="deptManagerApproval" name="部门经理审批" flowable:candidateGroups="dept_manager">
+            <documentation>部门经理审批报销申请</documentation>
+        </userTask>
+        
+        <!-- 判断报销金额 -->
+        <exclusiveGateway id="amountGateway" name="判断报销金额"/>
+        
+        <!-- 财务审批 -->
+        <userTask id="financeApproval" name="财务审批" flowable:candidateGroups="finance_admin">
+            <documentation>财务审批报销申请</documentation>
+        </userTask>
+        
+        <!-- 高管审批（金额大于5000需要高管审批） -->
+        <userTask id="leaderApproval" name="高管审批" flowable:candidateGroups="company_leader">
+            <documentation>高管审批大额报销申请（金额超过5000元）</documentation>
+        </userTask>
+        
+        <!-- 结束事件 -->
+        <endEvent id="endEvent" name="结束"/>
+        
+        <!-- 流程线 -->
+        <sequenceFlow id="flow1" sourceRef="startEvent" targetRef="deptManagerApproval"/>
+        <sequenceFlow id="flow2" sourceRef="deptManagerApproval" targetRef="amountGateway"/>
+        <sequenceFlow id="flow3" sourceRef="amountGateway" targetRef="leaderApproval">
+            <conditionExpression xsi:type="tFormalExpression">${totalAmount > 5000}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow4" sourceRef="amountGateway" targetRef="financeApproval">
+            <conditionExpression xsi:type="tFormalExpression">${totalAmount &lt;= 5000}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow5" sourceRef="leaderApproval" targetRef="financeApproval"/>
+        <sequenceFlow id="flow6" sourceRef="financeApproval" targetRef="endEvent"/>
+    </process>
+    
+    <bpmndi:BPMNDiagram id="BPMNDiagram_expense">
+        <bpmndi:BPMNPlane bpmnElement="expense" id="BPMNPlane_expense">
+            <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+                <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="163.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="deptManagerApproval" id="BPMNShape_deptManagerApproval">
+                <omgdc:Bounds height="80.0" width="100.0" x="200.0" y="138.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="amountGateway" id="BPMNShape_amountGateway">
+                <omgdc:Bounds height="40.0" width="40.0" x="370.0" y="158.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="leaderApproval" id="BPMNShape_leaderApproval">
+                <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="60.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="financeApproval" id="BPMNShape_financeApproval">
+                <omgdc:Bounds height="80.0" width="100.0" x="480.0" y="220.0"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="endEvent" id="BPMNShape_endEvent">
+                <omgdc:Bounds height="28.0" width="28.0" x="650.0" y="246.0"/>
+            </bpmndi:BPMNShape>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

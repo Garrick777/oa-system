@@ -33,13 +33,13 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'my/todo',
         name: 'MyTodo',
-        component: () => import('@/views/my/todo/index.vue'),
+        component: () => import('@/views/workflow/todo/index.vue'),
         meta: { title: '待办事项' },
       },
       {
         path: 'my/apply',
         name: 'MyApply',
-        component: () => import('@/views/my/apply/index.vue'),
+        component: () => import('@/views/workflow/apply/index.vue'),
         meta: { title: '我的申请' },
       },
       {
@@ -65,13 +65,13 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'approve/pending',
         name: 'ApprovePending',
-        component: () => import('@/views/approve/pending/index.vue'),
+        component: () => import('@/views/workflow/todo/index.vue'),
         meta: { title: '待我审批' },
       },
       {
         path: 'approve/done',
         name: 'ApproveDone',
-        component: () => import('@/views/approve/done/index.vue'),
+        component: () => import('@/views/workflow/done/index.vue'),
         meta: { title: '已审批' },
       },
       {
@@ -79,6 +79,26 @@ const routes: RouteRecordRaw[] = [
         name: 'ApproveCc',
         component: PlaceholderPage,
         meta: { title: '抄送给我' },
+      },
+      
+      // ========== 审批申请页面 ==========
+      {
+        path: 'workflow/apply',
+        name: 'WorkflowApply',
+        component: () => import('@/views/workflow/apply/index.vue'),
+        meta: { title: '发起申请' },
+      },
+      {
+        path: 'workflow/leave/create',
+        name: 'LeaveCreate',
+        component: () => import('@/views/workflow/leave/create.vue'),
+        meta: { title: '请假申请' },
+      },
+      {
+        path: 'workflow/expense/create',
+        name: 'ExpenseCreate',
+        component: PlaceholderPage,
+        meta: { title: '报销申请' },
       },
 
       // ========== 日程管理 ==========
