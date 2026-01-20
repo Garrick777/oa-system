@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oasystem.modules.system.mapper.MenuMapper">
+
+    <!-- 根据角色ID查询菜单 -->
+    <select id="selectMenusByRoleId" resultType="com.oasystem.modules.system.entity.Menu">
+        SELECT DISTINCT m.*
+        FROM sys_menu m
+        INNER JOIN sys_role_menu rm ON m.id = rm.menu_id
+        WHERE rm.role_id = #{roleId}
+          AND m.deleted = 0
+          AND m.status = 1
+        ORDER BY m.sort
+    </select>
+
+    <!-- 根据用户ID查询菜单 -->
+    <select id="selectMenusByUserId" resultType="com.oasystem.modules.system.entity.Menu">
+        SELECT DISTINCT m.*
+        FROM sys_menu m
+        INNER JOIN sys_role_menu rm ON m.id = rm.menu_id
+        INNER JOIN sys_user_role ur ON rm.role_id = ur.role_id
+        WHERE ur.user_id = #{userId}
+          AND m.deleted = 0
+          AND m.status = 1
+        ORDER BY m.sort
+    </select>
+
+</mapper>

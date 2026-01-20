@@ -1,0 +1,21 @@
+# 支持的浏览器列表
+# https://github.com/browserslist/browserslist
+
+# 现代浏览器
+> 1%
+last 2 versions
+not dead
+
+# 桌面浏览器
+Chrome >= 63
+Firefox >= 67
+Safari >= 11
+Edge >= 79
+
+# 移动端浏览器
+iOS >= 11
+Android >= 5
+
+# 排除
+not IE 11
+not op_mini all

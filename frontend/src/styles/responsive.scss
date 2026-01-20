@@ -1,0 +1,254 @@
+// ========================================
+// OA系统 - 响应式工具类
+// ========================================
+
+@use 'sass:math';
+@import './variables.scss';
+
+// ========================================
+// 显示/隐藏工具类
+// ========================================
+.hidden-xs { @media (max-width: 480px) { display: none !important; } }
+.hidden-sm { @media (max-width: 640px) { display: none !important; } }
+.hidden-md { @media (max-width: 768px) { display: none !important; } }
+.hidden-lg { @media (max-width: 1024px) { display: none !important; } }
+.hidden-xl { @media (max-width: 1280px) { display: none !important; } }
+
+.visible-xs { display: none !important; @media (max-width: 480px) { display: block !important; } }
+.visible-sm { display: none !important; @media (max-width: 640px) { display: block !important; } }
+.visible-md { display: none !important; @media (max-width: 768px) { display: block !important; } }
+.visible-lg { display: none !important; @media (max-width: 1024px) { display: block !important; } }
+
+// ========================================
+// 响应式容器
+// ========================================
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+
+  @media (min-width: 640px) { max-width: 640px; }
+  @media (min-width: 768px) { max-width: 768px; }
+  @media (min-width: 1024px) { max-width: 1024px; }
+  @media (min-width: 1280px) { max-width: 1280px; }
+  @media (min-width: 1536px) { max-width: 1536px; }
+}
+
+// ========================================
+// 响应式栅格
+// ========================================
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -12px;
+  margin-right: -12px;
+
+  @media (max-width: 767px) {
+    margin-left: -8px;
+    margin-right: -8px;
+  }
+}
+
+[class*="col-"] {
+  padding-left: 12px;
+  padding-right: 12px;
+  box-sizing: border-box;
+
+  @media (max-width: 767px) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+// 基础列
+@for $i from 1 through 12 {
+  .col-#{$i} { width: math.percentage(math.div($i, 12)); }
+}
+
+// 小屏 (>=640px)
+@media (min-width: 640px) {
+  @for $i from 1 through 12 {
+    .col-sm-#{$i} { width: math.percentage(math.div($i, 12)); }
+  }
+}
+
+// 中屏 (>=768px)
+@media (min-width: 768px) {
+  @for $i from 1 through 12 {
+    .col-md-#{$i} { width: math.percentage(math.div($i, 12)); }
+  }
+}
+
+// 大屏 (>=1024px)
+@media (min-width: 1024px) {
+  @for $i from 1 through 12 {
+    .col-lg-#{$i} { width: math.percentage(math.div($i, 12)); }
+  }
+}
+
+// 超大屏 (>=1280px)
+@media (min-width: 1280px) {
+  @for $i from 1 through 12 {
+    .col-xl-#{$i} { width: math.percentage(math.div($i, 12)); }
+  }
+}
+
+// ========================================
+// 响应式间距
+// ========================================
+.gap-responsive {
+  gap: 24px;
+
+  @media (max-width: 1024px) { gap: 20px; }
+  @media (max-width: 768px) { gap: 16px; }
+  @media (max-width: 480px) { gap: 12px; }
+}
+
+// ========================================
+// 响应式文字
+// ========================================
+.text-responsive {
+  font-size: 16px;
+
+  @media (max-width: 768px) { font-size: 15px; }
+  @media (max-width: 480px) { font-size: 14px; }
+}
+
+.heading-responsive {
+  font-size: 28px;
+
+  @media (max-width: 1024px) { font-size: 24px; }
+  @media (max-width: 768px) { font-size: 22px; }
+  @media (max-width: 480px) { font-size: 20px; }
+}
+
+// ========================================
+// 响应式卡片布局
+// ========================================
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+
+  @media (max-width: 1280px) { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 1024px) { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  @media (max-width: 640px) { grid-template-columns: 1fr; gap: 16px; }
+}
+
+.card-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+
+  @media (max-width: 1024px) { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  @media (max-width: 640px) { grid-template-columns: 1fr; gap: 16px; }
+}
+
+.card-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+
+  @media (max-width: 768px) { grid-template-columns: 1fr; gap: 16px; }
+}
+
+// ========================================
+// 响应式表格
+// ========================================
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  // 滚动条样式
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+
+    &:hover {
+      background: #94a3b8;
+    }
+  }
+}
+
+// ========================================
+// 移动端友好的触摸目标
+// ========================================
+@mixin touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.touch-target {
+  @include touch-target;
+}
+
+// ========================================
+// 安全区域适配 (iPhone X+ 刘海屏)
+// ========================================
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.safe-area-left {
+  padding-left: env(safe-area-inset-left, 0);
+}
+
+.safe-area-right {
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+// ========================================
+// 横竖屏适配
+// ========================================
+@media (orientation: landscape) and (max-height: 500px) {
+  .landscape-compact {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+}
+
+// ========================================
+// 打印样式
+// ========================================
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .sidebar,
+  .topbar {
+    display: none !important;
+  }
+
+  .main-container {
+    margin-left: 0 !important;
+  }
+
+  .main-content {
+    padding: 0 !important;
+  }
+}
